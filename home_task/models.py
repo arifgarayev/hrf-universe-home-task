@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     String,
     Table,
+    UUID
 )
 from sqlalchemy.orm import registry
 
@@ -13,6 +14,8 @@ mapper_registry = registry()
 Model = mapper_registry.generate_base()
 
 
+class Base():
+    ...
 
 @mapper_registry.mapped
 @dataclass
