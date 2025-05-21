@@ -9,10 +9,11 @@ packages = [{include = "hrf_universe_home_task"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.94.0"
-psycopg2 = "^2.9.5"
-sqlalchemy = "<1.4.10"
+sqlalchemy = { version = "<1.4.10", extras = ["asyncio"] }
 alembic = "^1.10.2"
-
+celery = "^5.5.2"
+psycopg-binary = "^3.2.9"
+python-dotenv = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core"]

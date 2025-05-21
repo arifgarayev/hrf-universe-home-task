@@ -2,13 +2,60 @@ version: '3.1'
 
 services:
   postgres:
+    build:
+      context: .
+      dockerfile: ./infrastructure/postgres.Dockerfile
+    image: hrf-universe-postgres
     container_name: hrf_universe_postgres
-    image: postgres:13.4
     shm_size: 1g
     restart: unless-stopped
-    environment:
-      POSTGRES_DB: home_task
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: adm1n_password
+    env_file:
+      - .env
     ports:
       - 5432:5432
+
+
+  app:
+    build:
+      context: .
+      dockerfile: ./infrastructure/app.Dockerfile
+    
+    image: hrf-universe-app
+    container_name: hrf_universe_app
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: ./infrastructure/rabbitmq.Dockerfile
+    image: hrf-universe-rabbitmq
+    container_name: hrf_universe_rabbitmq
+    restart: unless-stopped
+    ports:
+      - 5672:5672
+  
+  # celery-worker:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infrastructure/celery.Dockerfile
+  #   image: hrf-universe-celery
+  #   container_name: hrf_universe_celery
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - app
+  #     - db
+  #     - redis
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/app
+
+  
