@@ -1,40 +1,48 @@
+import uuid
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    Table,
-    UUID
-)
+from sqlalchemy import Column, DateTime, Float, Integer, String, Table, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import registry
 
 mapper_registry = registry()
-Model = mapper_registry.generate_base()
 
 
-class Base():
-    ...
+class Model: ...
+
 
 @mapper_registry.mapped
 @dataclass
 class HireStatistics(Model):
     __table__ = Table(
-
+        "hire_statistics",
+        mapper_registry.metadata,
+        Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        Column(
+            "created_at",
+            DateTime(timezone=True),
+            nullable=False,
+            server_default=func.now(),
+        ),
+        Column("standard_job_id", String, nullable=False),
+        Column("country_code", String, nullable=True),
+        Column("minimum", Float, nullable=False),
+        Column("maximum", Float, nullable=False),
+        Column("average", Float, nullable=False),
+        Column("n_of_postings", Integer, nullable=False),
+        schema="public",
     )
 
-    id: str
-    standard_job_id: str # required
-    country_code: Optional[str] = None # if None -> meaning global
+    id: UUID
+    created_at: datetime
+    standard_job_id: str  # required
     minimum: float
     maximum: float
     average: float
     n_of_postings: int
-
-    
-
-    
+    country_code: Optional[str] = None  # if None -> meaning global
 
 
 @mapper_registry.mapped

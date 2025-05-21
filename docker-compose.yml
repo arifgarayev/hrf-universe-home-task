@@ -9,6 +9,8 @@ services:
     container_name: hrf_universe_postgres
     shm_size: 1g
     restart: unless-stopped
+    volumes:
+      - ./migrations/data:/tmp/data
     env_file:
       - .env
     ports:
