@@ -10,10 +10,28 @@ from sqlalchemy import (
 from sqlalchemy.orm import registry
 
 mapper_registry = registry()
+Model = mapper_registry.generate_base()
 
 
-class Model:
-    pass
+
+@mapper_registry.mapped
+@dataclass
+class HireStatistics(Model):
+    __table__ = Table(
+
+    )
+
+    id: str
+    standard_job_id: str # required
+    country_code: Optional[str] = None # if None -> meaning global
+    minimum: float
+    maximum: float
+    average: float
+    n_of_postings: int
+
+    
+
+    
 
 
 @mapper_registry.mapped
