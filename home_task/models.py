@@ -88,8 +88,6 @@ class HireStatistics(Model):
         schema="public",
     )
 
-    id: UUID
-    created_at: datetime
     standard_job_id: str  # required
     minimum: float
     maximum: float
