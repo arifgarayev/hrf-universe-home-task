@@ -11,4 +11,4 @@ selector = JobPostingSelector(db_session_selector)
 
 generator = selector.query(job_posting_threshold=0, is_batch=True)
 
-print(HireStatistics(**next(generator)[0]))
+# print(HireStatistics(**next(generator)[0]))

@@ -30,6 +30,8 @@ services:
       - 8000:8000
     depends_on:
       - postgres
+      - rabbitmq
+      - celery-worker
     volumes:
       - .:/app
 
@@ -43,21 +45,17 @@ services:
     ports:
       - 5672:5672
   
-  # celery-worker:
-  #   build:
-  #     context: .
-  #     dockerfile: ./infrastructure/celery.Dockerfile
-  #   image: hrf-universe-celery
-  #   container_name: hrf_universe_celery
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - app
-  #     - db
-  #     - redis
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - .:/app
+  celery-worker:
+    build:
+      context: .
+      dockerfile: ./infrastructure/celery_worker.Dockerfile
+    image: hrf-universe-celery
+    container_name: hrf_universe_celery
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env
+    volumes:
+      - .:/app
 
   

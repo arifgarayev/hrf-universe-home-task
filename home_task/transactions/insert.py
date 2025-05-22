@@ -1,20 +1,33 @@
 from home_task.models import HireStatistics
-
+from sqlalchemy.dialects.postgresql import insert
 
 class HireStatisticsInsert:
     def __init__(self, db_session):
         self.db_session = db_session
 
     def insert(self, stats: list[dict]):
-        
-        stats_model = [HireStatistics(**s) for s in stats]
-        self.db_session.bulk_save_objects(stats_model)
-        # trans = self.db_session.get_transaction()
-        # if trans:
-        #     print(trans.origin)
 
-        # print(self.db_session.in_transaction())
-        # # self.db_session.add_all(stats_model)
-        # print(self.db_session.in_transaction())
-        # return stats_model
-    
+        # no other way to do this
+        # N + 1 upsert
+
+
+        with self.db_session.begin_nested():
+            for stat in stats:
+                
+                ctx = insert(HireStatistics.__table__).values(stat)
+            
+                upsert = ctx.on_conflict_do_update(
+                    index_elements=['standard_job_id', 'country_code'],   # the two-column unique constraint
+                    set_={
+                        'minimum': ctx.excluded.minimum,
+                        'average': ctx.excluded.average,
+                        'maximum': ctx.excluded.maximum,
+                        'n_of_postings': ctx.excluded.n_of_postings,
+                    }
+                
+                )
+
+
+                self.db_session.execute(upsert)
+        
+        

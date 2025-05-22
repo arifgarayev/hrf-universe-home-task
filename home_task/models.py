@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, Float, Integer, String, Table, ForeignKey, func
+from sqlalchemy import Column, DateTime, Float, Integer, String, Table, ForeignKey, func, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import registry
 
@@ -85,6 +85,14 @@ class HireStatistics(Model):
         Column("maximum", Float, nullable=False),
         Column("average", Float, nullable=False),
         Column("n_of_postings", Integer, nullable=False),
+
+        UniqueConstraint(
+        "standard_job_id",
+        "country_code",
+        name="uq_hire_statistics_stdjob_country"
+    ),
+
+
         schema="public",
     )
 
