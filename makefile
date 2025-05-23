@@ -10,7 +10,7 @@ poetry-config:
 	POETRY_VIRTUALENVS_CREATE=false poetry install
 
 build-images:
-	docker compose build --no-cache
+	docker compose build
 
 up-container:
 	docker-compose up -d
