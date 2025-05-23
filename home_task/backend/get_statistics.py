@@ -33,11 +33,10 @@ async def hire_stats(
 
     db_session = get_session()
 
-    return asdict(
-        db_session.query(HireStatistics)
-        .where(
-            HireStatistics.standard_job_id == standard_job_id,
-            HireStatistics.country_code == country_code,
-        )
-        .first()
-    )
+    response = db_session.query(HireStatistics).where(
+            HireStatistics.standard_job_id == standard_job_id.strip(),
+            HireStatistics.country_code == country_code.strip(),
+        ).first()
+
+    return asdict(response) if response else {}
+
