@@ -85,6 +85,9 @@ class HireStatistics(Model):
         Column("maximum", Float, nullable=False),
         Column("average", Float, nullable=False),
         Column("n_of_postings", Integer, nullable=False),
+        Column("updated_at", DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()),
+        Column("threshold", Integer, nullable=True, server_default="5"),
+        
 
         UniqueConstraint(
         "standard_job_id",
@@ -96,9 +99,14 @@ class HireStatistics(Model):
         schema="public",
     )
 
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
     standard_job_id: str  # required
     minimum: float
     maximum: float
     average: float
     n_of_postings: int
+    threshold: int
     country_code: Optional[str] = None  # if None -> meaning global
+    

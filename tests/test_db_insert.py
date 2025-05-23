@@ -25,5 +25,5 @@ print(selected_result)
 insert_result = insert.insert(selected_result)
 
 
-# db_session.commit()
+db_session.commit()
 

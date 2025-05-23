@@ -58,6 +58,7 @@ class JobPostingSelector:
         return select(
         clean_jp.c.standard_job_id,
         clean_jp.c.country_code,
+        literal(job_posting_threshold).label('threshold'),
         func.min(clean_jp.c.days_to_hire)
             .filter(
                 clean_jp.c.days_to_hire.between(
