@@ -90,6 +90,8 @@ The solution is fully containerized and offers cross-platform dependency managem
   
 <br />
 
+## Walk-through video
+[![Use-case walkthough video](https://i.ytimg.com/vi/oMI8xKEUHUw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAUEmvKQz2dbitlBD0ghglNAEWtWw)](https://www.youtube.com/watch?v=oMI8xKEUHUw)
 
 
 <!-- GETTING STARTED -->
