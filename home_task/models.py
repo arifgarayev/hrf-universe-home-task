@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, Float, Integer, String, Table, ForeignKey, func, UniqueConstraint
+from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, String,
+                        Table, UniqueConstraint, func)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import registry
 
@@ -79,23 +80,28 @@ class HireStatistics(Model):
             nullable=False,
             server_default=func.now(),
         ),
-        Column("standard_job_id", String, ForeignKey("public.standard_job.id"), nullable=False),
+        Column(
+            "standard_job_id",
+            String,
+            ForeignKey("public.standard_job.id"),
+            nullable=False,
+        ),
         Column("country_code", String, nullable=True),
         Column("minimum", Float, nullable=False),
         Column("maximum", Float, nullable=False),
         Column("average", Float, nullable=False),
         Column("n_of_postings", Integer, nullable=False),
-        Column("updated_at", DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()),
+        Column(
+            "updated_at",
+            DateTime(timezone=True),
+            nullable=False,
+            server_default=func.now(),
+            onupdate=func.now(),
+        ),
         Column("threshold", Integer, nullable=True, server_default="5"),
-        
-
         UniqueConstraint(
-        "standard_job_id",
-        "country_code",
-        name="uq_hire_statistics_stdjob_country"
-    ),
-
-
+            "standard_job_id", "country_code", name="uq_hire_statistics_stdjob_country"
+        ),
         schema="public",
     )
 
@@ -109,4 +115,3 @@ class HireStatistics(Model):
     n_of_postings: int
     threshold: int
     country_code: Optional[str] = None  # if None -> meaning global
-    

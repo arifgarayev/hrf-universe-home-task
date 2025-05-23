@@ -42,4 +42,8 @@ RUN poetry install $POETRY_INSTALL_ARGS
 
 COPY . .
 
-CMD ["tail", "-f", "/dev/null"]
+EXPOSE 8000
+
+
+# RUN alembic upgrade head
+ENTRYPOINT python3 entrypoint.py

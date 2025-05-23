@@ -1,11 +1,12 @@
 import sys
-sys.path.insert(0, '/Users/arifgarayev/hrf-universe-home-task/')
+
+sys.path.insert(0, "/Users/arifgarayev/hrf-universe-home-task/")
 import json
-from home_task.tasks.tasks import insert_hire_statistics
-from home_task.selectors.selector import JobPostingSelector
-from home_task.transactions.insert import HireStatisticsInsert
+
 from home_task.db import get_session
+from home_task.selectors.selector import JobPostingSelector
 from home_task.tasks.tasks import insert_hire_statistics
+from home_task.transactions.insert import HireStatisticsInsert
 
 db_session = get_session()
 

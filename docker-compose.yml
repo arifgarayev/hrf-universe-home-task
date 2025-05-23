@@ -15,8 +15,6 @@ services:
       - .env
     ports:
       - 5432:5432
-    networks:
-      - default
 
 
   app:
@@ -36,8 +34,7 @@ services:
       - celery-worker
     volumes:
       - .:/app
-    networks:
-      - default
+
 
   rabbitmq:
     build:
@@ -48,8 +45,6 @@ services:
     restart: unless-stopped
     ports:
       - 5672:5672
-    networks:
-      - default
   
   celery-worker:
     build:
@@ -63,12 +58,10 @@ services:
       - .env
     volumes:
       - .:/app
-    networks:
-      - default
+
 
 
 networks:
-  default:
-    driver: bridge
-
-  
+  common:
+    name: bridge
+    driver: custom-bridge

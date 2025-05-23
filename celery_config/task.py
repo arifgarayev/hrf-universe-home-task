@@ -1,7 +1,8 @@
 import os
-from celery import Celery
-import config
 
+from celery import Celery
+
+import config
 
 app = Celery(
     "task",
@@ -14,5 +15,3 @@ app.autodiscover_tasks(["home_task.tasks"])
 
 def get_celery_app():
     return app
-
-

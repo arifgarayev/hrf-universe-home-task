@@ -1,10 +1,10 @@
 import sys
-sys.path.insert(0, '/Users/arifgarayev/hrf-universe-home-task/')
 
-from home_task.selectors.selector import JobPostingSelector
-from home_task.models import HireStatistics
+sys.path.insert(0, "/Users/arifgarayev/hrf-universe-home-task/")
+
 from home_task.db import get_session
-
+from home_task.models import HireStatistics
+from home_task.selectors.selector import JobPostingSelector
 
 db_session_selector = get_session()
 selector = JobPostingSelector(db_session_selector)

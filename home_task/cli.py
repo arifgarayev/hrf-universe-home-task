@@ -1,8 +1,7 @@
+from home_task.db import get_session
+from home_task.models import HireStatistics
 from home_task.selectors.selector import JobPostingSelector
 from home_task.transactions.insert import HireStatisticsInsert
-from home_task.models import HireStatistics
-from home_task.db import get_session
-
 
 
 class CLI:
@@ -15,10 +14,10 @@ class CLI:
 
     def start_flow(self):
 
-        for value in self.jp_selector.query(job_posting_threshold=self.threshold, is_batch=True):
-            
+        for value in self.jp_selector.query(
+            job_posting_threshold=self.threshold, is_batch=True
+        ):
+
             self.hire_statistics.insert(value)
 
         self.session.commit()
-        
-
