@@ -1,97 +1,159 @@
-This is a task to check your skills in Python and SQL.
-It is a simplified version of a real task in our project.
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/arifgarayev/hrf-universe-home-task">
+    <img src="img/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-Create a public fork of this repository and send us a link to your fork when you are done.
+<h3 align="center">HRF - Universe Home Task submission </h3>
 
-# Task
+  <table>
+    <thead>
+        <tr>
+            <th>Step</th>
+            <th>Task Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Part 1: Create a table in the database to store "days to hire" statistics.</strong></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>1.1</td>
+            <td>Statistics should be per country(also global for the world) and per standard job.</td>
+        </tr>
+        <tr>
+            <td>1.2</td>
+            <td>It should contain average, minimum, and maximum days to hire.</td>
+        </tr>
+        <tr>
+            <td>1.3</td>
+            <td>Also, it should contain a number of job postings used to calculate the average. We use this value to measure statistics quality. If the number of job postings is small, values can be inaccurate.</td>
+        </tr>
+        <tr>
+            <td><strong>Part 2: Write a CLI script to calculate "days to hire" statistics and store it in a created table</strong></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2.1</td>
+            <td>Minimum days to hire is 10 percentile. <br>
+Maximum days to hire is 90 percentile.<br>Average days to hire is an average of remaining values after cutting 10 and 90 percentiles.</td>
+        </tr>
+        <tr>
+            <td>2.2</td>
+            <td>Number of job postings is a number of rows used to calculate an average.</td>
+        </tr>
+        <tr>
+            <td>2.3</td>
+            <td>Do not save resulted row if a number of job postings is less than 5. Allow passing this threshold as a parameter.</td>
+        </tr> <tr><td>2.4</td><td>For each country and standard job create a separate row in a table.</td></tr>        </tr> <tr><td>2.5</td><td>Also, create a row for world per standard job. Job postings with country_code equal to NULL should be included in this calculation.<br>Overwrite existing rows in the table. We need only the latest statistics.</td></tr>
+        <tr>
+            <td><strong>Part 3: Create REST API with one endpoint to get "days to hire" statistics.</strong></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3.1</td>
+            <td>
+    Endpoint should accept standard_job_id and country_code as request parameters.<br>
+    If country_code is not specified, return statistics for the world.
+</td>
+        </tr>
+        
+    </tbody>
+</table>
+</div>
 
-We have millions of job postings crawled from the internet and want to calculate some statistics about days to hire.
 
-Job posting structure:
 
-```python
-@dataclass
-class JobPosting:
-    id: str
-    title: str
-    standard_job_id: str
-    country_code: Optional[str] = None
-    days_to_hire: Optional[int] = None
-```
+<!-- ABOUT THE PROJECT -->
+## About The Project
+The solution is fully containerized and offers cross-platform dependency management. All the CLI commands are sent into running container application.
 
-- `standard_job_id` -- all job postings are assigned to a standard job. It is a job title normalized to a common form,
-  e.g. "Software Engineer" and "Software Developer" are both assigned to "Software Engineer".
-- `country_code` -- country code in ISO 3166-1 alpha-2 format. 
-  It can be `None` if we can't determine the country.
-- `days_to_hire` -- a number of days between posting date and hire date. 
-  It can be `None` if a job posting is not hired yet.
 
-## 1. Create a table in the database to store "days to hire" statistics. 
 
-- Statistics should be per country(also global for the world) and per standard job.
-- It should contain average, minimum, and maximum days to hire.
-- Also, it should contain a number of job postings used to calculate the average. 
-We use this value to measure statistics quality. If the number of job postings is small, values can be inaccurate.
+`Poetry` - dependency and package manager used to manage dependencies and virtual env on the project.
 
-You can add SQLAlchemy model to `home_task.models` module and generate a migration with:
+`Makefile` (*NIX build tool `make`) - was used to shortcut project linters, syntax formatters, checking vulnerabilities and etc...
 
-    alembic revision --autogenerate -m "<description>"
+`FastAPI` - used for web API route implementation
 
-## 2. Write a CLI script to calculate "days to hire" statistics and store it in a created table.
+`Pydantic` - was used for serialization and data validation
 
-`days_to_hire` can contain potentially invalid values, because it is quite difficult to gather this information.
-For example, 1 day in most cases means that job posting was closed and reopened without real hiring.
-Large values can be caused by incorrect parsing of dates. 
-So we want to cut lowest and highest percentiles of `days_to_hire` before calculating average.
+`Celery` - installed but not fully utilized for asynchronous message broker communication and data insertion. 
 
-- Minimum days to hire is 10 percentile.
-- Maximum days to hire is 90 percentile.
-- Average days to hire is an average of **remaining values after cutting 10 and 90 percentiles**.
-- Number of job postings is a number of rows used to calculate an average.
-- Do not save resulted row if a number of job postings is less than 5. 
-  Allow passing this threshold as a parameter.
-- For each country and standard job create a separate row in a table.
-- Also, create a row for world per standard job. 
-  Job postings with `country_code` equal to `NULL` should be included in this calculation.
-- Overwrite existing rows in the table. We need only the latest statistics.
+`RabbitMQ` - underline message broker for `Celery` support.
 
-## 3. Create REST API with one endpoint to get "days to hire" statistics.
+`Uvicorn` - application server to accept socket network requests and redirect to the implemented route.
 
-- Endpoint should accept `standard_job_id` and `country_code` as request parameters.
-- If `country_code` is not specified, return statistics for the world.
+`Environment variables` - `.env` file central configuration management.
 
-Response example:
+`Volumes` - used for hot-reload and live sync of local vs container hosts.
 
-    {
-        "standard_job_id": "5affc1b4-1d9f-4dec-b404-876f3d9977a0",
-        "country_code": "DE",
-        "min_days": 11.0,
-        "avg_days": 50.5,
-        "max_days": 80.9,
-        "job_postings_number": 100,
-    }
+`Alembic` - used for database DDL and migrations.
 
-# Some information to consider
+`SQLAlchemy` - ORM, but mostly SQLAlchemy Core is prioritized due to complexity and inner SQL Queries.
 
-- Use FastAPI for REST API.
-- It is not necessary to use ORM. You can use raw SQL queries. 
-  Connection to the database is available in `home_task.db` module.
-- In a real environment code can fail at any moment with some probability. The database should not be corrupted.
-- In a real database we have millions of rows, so you can't load all of them into memory at once.
-- In a real environment new job postings are continuously added to the database. 
-  For simplicity, you can assume that data is frozen and will not change during script execution.
 
-# Installation
+  
+<br />
 
-Install packages with poetry:
+## Use-case walkthough video
 
-    python3 -m venv venv
-    . venv/bin/activate
-    pip install poetry
-    POETRY_VIRTUALENVS_CREATE=false poetry install
+[![Use-case walkthough video](https://img.youtube.com/)](https://www.youtube.com/watch?)
 
-Create database:
 
-    docker-compose up -d
-    docker cp migrations/data/ hrf_universe_postgres:/tmp
-    alembic upgrade head
+<!-- GETTING STARTED -->
+## Getting Started
+
+How to set up your project locally.
+To get a local copy up and running follow these simple example steps.
+First, clone the repository.
+Docker Deamon is used to manage project deployments.
+
+### Prerequisites
+
+Docker Deamon must be installed and enabled.
+Make build tool preferred, but not required
+
+
+### Installation & Deployement
+
+with Make build tool
+  ```sh
+  make build-images
+  make up-container
+  make apply-migrations 
+  ```
+
+without Make build tool
+  ```
+  docker-compose -f docker-compose.yml build 
+  docker-compose -f docker-compose.yml up
+
+  docker cp migrations/data/ hrf_universe_postgres:/tmp
+alembic upgrade head
+  ```
+
+
+
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+`http://0.0.0.0:8000` - base URL for API </br></br>
+`/hire_stats` - `GET` endpoint Accepting (Query `paramsstandard_job_id`*required, `country_code`-optional) </br></br>
+```docker compose exec app python entrypoint.py -d -t 5``` - CLI command and flags to trigger statistics calculations. All calculations are batched </br></br>
+`-d` or `--days_to_hire` - flag to trigger calculation/recalculation (upsert)</br></br>
+`-t` or `--threshold` - optional flag to pass threshold of hire days integer value as an argument. Default value is = `5` </br></br>
+
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Arif Garayev - [Email](mailto:garayevarif@gmail.com)
+
+Project Link: [Repository](https://github.com/arifgarayev/hrf-universe-home-task)
+

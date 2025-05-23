@@ -9,7 +9,7 @@ poetry-config:
 	pip install poetry && \
 	POETRY_VIRTUALENVS_CREATE=false poetry install
 
-build-container:
+build-images:
 	docker compose build --no-cache
 
 up-container:
