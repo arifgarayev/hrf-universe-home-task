@@ -1,10 +1,3 @@
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/arifgarayev/hrf-universe-home-task">
-    <img src="img/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
 <h3 align="center">HRF - Universe Home Task submission </h3>
 
   <table>
@@ -60,7 +53,6 @@ Maximum days to hire is 90 percentile.<br>Average days to hire is an average of 
 </td>
         </tr>
         
-    </tbody>
 </table>
 </div>
 
@@ -98,9 +90,6 @@ The solution is fully containerized and offers cross-platform dependency managem
   
 <br />
 
-## Use-case walkthough video
-
-[![Use-case walkthough video](https://img.youtube.com/)](https://www.youtube.com/watch?)
 
 
 <!-- GETTING STARTED -->
@@ -130,7 +119,6 @@ without Make build tool
   ```
   docker-compose -f docker-compose.yml build 
   docker-compose -f docker-compose.yml up
-
 
 alembic upgrade head
   ```
