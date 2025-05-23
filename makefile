@@ -16,5 +16,4 @@ up-container:
 	docker-compose up -d
 
 apply-migrations:
-	docker cp migrations/data/ hrf_universe_postgres:/tmp
 	alembic upgrade head
